@@ -1,16 +1,14 @@
 package main
 
 import (
-	"gihora/api/router"
+	"gihora/api/route"
 	"log"
 )
 
 func main() {
-	r := router.InitRouter()
-
-	log.Println("Server starting on 8080...")
+	r := route.InitRouter()
 
 	if err := r.Run(":8080"); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		log.Fatalf("服务启动失败: %v", err)
 	}
 }
