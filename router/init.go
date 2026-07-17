@@ -1,7 +1,7 @@
-package route
+package router
 
 import (
-	v1 "gihora/api/route/v1"
+	"gihora/internal/dst"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,11 +9,13 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.New()
 
-	r.SetTrustedProxies(nil)
+	if err := r.SetTrustedProxies(nil); err != nil {
+		return nil
+	}
 
 	r.Use(gin.Logger(), gin.Recovery())
 
-	v1.RegisterV1Routes(r)
+	dst.RegisterRoutes(r)
 
 	return r
 }
