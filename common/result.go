@@ -16,14 +16,6 @@ func Success(data any) R {
 	}
 }
 
-func SuccessMsg(msg string, data any) R {
-	return R{
-		Code: http.StatusOK,
-		Msg:  msg,
-		Data: data,
-	}
-}
-
 func Fail(code int, msg string) R {
 	return R{
 		Code: code,
