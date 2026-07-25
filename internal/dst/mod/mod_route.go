@@ -2,12 +2,21 @@ package mod
 
 import "github.com/gin-gonic/gin"
 
-func RegisterRoutes(group *gin.RouterGroup) {
+func RegisterRoutes(group *gin.RouterGroup) error {
+	manager, err := NewManager()
+	if err != nil {
+		return err
+	}
+	service := NewService(manager)
+	handler := NewHandler(service)
+
 	modGroup := group.Group("/mods")
 	{
-		modGroup.GET("/", ListMods)
-		modGroup.POST("/:modId", SubMod)
-		modGroup.DELETE("/:modId", UnsubMod)
-		modGroup.PUT("/:modId", UpdateModRemark)
+		modGroup.GET("/", handler.ListMods)
+		modGroup.POST("/:id", handler.SubMod)
+		modGroup.DELETE("/:id", handler.UnsubMod)
+		modGroup.PUT("/:id", handler.UpdateModRemark)
 	}
+
+	return nil
 }

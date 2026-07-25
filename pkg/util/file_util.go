@@ -2,16 +2,23 @@ package util
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"os"
 )
 
 func ReadFileByLine(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("打开文件失败: %w", err)
+		log.Printf("[ERROR] 打开文件失败: %v\n", err)
+		return nil, err
 	}
-	defer file.Close()
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Printf("[ERROR] 关闭文件失败: %v\n", err)
+		}
+	}(file)
 
 	var lineSlice []string
 	scanner := bufio.NewScanner(file)
@@ -19,9 +26,19 @@ func ReadFileByLine(path string) ([]string, error) {
 		line := scanner.Text()
 		lineSlice = append(lineSlice, line)
 		if err := scanner.Err(); err != nil {
-			return nil, fmt.Errorf("读取文件错误: %w", err)
+			log.Printf("[ERROR] 读取文件失败: %v\n", err)
+			return nil, err
 		}
 	}
 
 	return lineSlice, nil
+}
+
+func WriteToFile(path, content string) error {
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		log.Printf("[ERROR] 写入文件失败: %v\n", err)
+		return err
+	}
+
+	return nil
 }
