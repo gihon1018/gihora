@@ -57,7 +57,7 @@ func (m *Manager) init() error {
 func (m *Manager) save() error {
 	sb := strings.Builder{}
 	for _, mod := range m.ModList {
-		sb.WriteString(fmt.Sprintf("ServerModSetup(\"%s\") -- %s\n", mod.Id, mod.Remark))
+		fmt.Fprintf(&sb, "ServerModSetup(\"%s\") -- %s\n", mod.Id, mod.Remark)
 	}
 
 	if err := util.WriteToFile(m.cfg.ModFilePath, sb.String()); err != nil {
