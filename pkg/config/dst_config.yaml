@@ -1,2 +1,5 @@
 # mods_setup_path: "/home/steam/Steam/steamapps/common/Don't Starve Together Dedicated Server/mods/dedicated_server_mods_setup.lua"
-mods_setup_path: "test/mods/dedicated_server_mods_setup.lua"
+mods_setup_path: "test/mod/dedicated_server_mods_setup.lua"
+
+# save_dir_path: "/home/steam/dst/save"
+save_dir_path: "test/save"
