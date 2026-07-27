@@ -26,27 +26,25 @@ func (h *Handler) ListMods(c *gin.Context) {
 }
 
 func (h *Handler) SubMod(c *gin.Context) {
-	id := c.Param("id")
-
 	var mod Mod
 	if err := c.ShouldBindJSON(&mod); err != nil {
-		resp.Fail(c, apperr.ModParamInvalid.Code, fmt.Sprintf("模组 %s 参数无效", id))
+		resp.Fail(c, apperr.ModParamInvalid)
 		return
 	}
 
-	if err := h.service.SubMod(id, mod.Remark); err != nil {
-		resp.Fail(c, apperr.ModSubFail.Code, fmt.Sprintf("模组 %s 订阅失败", id))
+	if err := h.service.SubMod(mod.Id, mod.Remark); err != nil {
+		resp.Fail(c, err)
 		return
 	}
 
-	resp.Success(c, fmt.Sprintf("模组 %s 订阅成功", id))
+	resp.Success(c, fmt.Sprintf("模组 %s 订阅成功", mod.Id))
 }
 
 func (h *Handler) UnsubMod(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := h.service.UnsubMod(id); err != nil {
-		resp.Fail(c, apperr.ModUnsubFail.Code, fmt.Sprintf("模组 %s 取消订阅失败", id))
+		resp.Fail(c, err)
 		return
 	}
 
@@ -58,12 +56,12 @@ func (h *Handler) UpdateModRemark(c *gin.Context) {
 
 	var mod Mod
 	if err := c.ShouldBindJSON(&mod); err != nil {
-		resp.Fail(c, apperr.ModParamInvalid.Code, fmt.Sprintf("模组 %s 参数无效", id))
+		resp.Fail(c, apperr.ModParamInvalid)
 		return
 	}
 
 	if err := h.service.UpdateModRemark(id, mod.Remark); err != nil {
-		resp.Fail(c, apperr.ModSubFail.Code, fmt.Sprintf("模组 %s 更新备注失败", id))
+		resp.Fail(c, err)
 		return
 	}
 

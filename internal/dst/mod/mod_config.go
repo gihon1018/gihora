@@ -7,7 +7,7 @@ const (
 )
 
 type Config struct {
-	ModFilePath string `yaml:"mod_file_path"`
+	ModsSetupPath string `yaml:"mods_setup_path"`
 }
 
 func InitConfig() (Config, error) {

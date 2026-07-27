@@ -1,6 +1,7 @@
 package resp
 
 import (
+	"gihora/pkg/apperr"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +21,26 @@ func Success(c *gin.Context, data any) {
 	})
 }
 
-func Fail(c *gin.Context, code int, msg string) {
-	c.JSON(http.StatusOK, Resp{
+func Fail(c *gin.Context, err error) {
+	ae, ok := apperr.IsAppError(err)
+	if ok {
+		c.JSON(ae.HTTPStatus, Resp{
+			Code: ae.Code,
+			Msg:  ae.Msg,
+			Data: nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusInternalServerError, Resp{
+		Code: 500000,
+		Msg:  "服务器内部异常",
+		Data: nil,
+	})
+}
+
+func FailMsg(c *gin.Context, httpStatus, code int, msg string) {
+	c.JSON(httpStatus, Resp{
 		Code: code,
 		Msg:  msg,
 	})

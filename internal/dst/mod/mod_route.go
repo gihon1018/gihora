@@ -13,9 +13,9 @@ func RegisterRoutes(group *gin.RouterGroup) error {
 	modGroup := group.Group("/mods")
 	{
 		modGroup.GET("/", handler.ListMods)
-		modGroup.POST("/:id", handler.SubMod)
+		modGroup.POST("/", handler.SubMod)
 		modGroup.DELETE("/:id", handler.UnsubMod)
-		modGroup.PUT("/:id", handler.UpdateModRemark)
+		modGroup.PATCH("/:id", handler.UpdateModRemark)
 	}
 
 	return nil
