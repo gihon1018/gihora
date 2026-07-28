@@ -58,7 +58,10 @@ func (m *Manager) init() error {
 func (m *Manager) save() error {
 	sb := strings.Builder{}
 	for _, mod := range m.ModList {
-		fmt.Fprintf(&sb, "ServerModSetup(\"%s\") -- %s\n", mod.Id, mod.Remark)
+		if _, err := fmt.Fprintf(&sb, "ServerModSetup(\"%s\") -- %s\n", mod.Id, mod.Remark); err != nil {
+			log.Printf("[ERROR] 模组列表遍历失败: %v\n", err)
+			return err
+		}
 	}
 
 	if err := util.WriteToFile(m.cfg.ModsSetupPath, sb.String()); err != nil {
@@ -98,7 +101,7 @@ func (m *Manager) SubMod(id, remark string) error {
 
 	if err := m.save(); err != nil {
 		log.Printf("[ERROR] 模组 %s 订阅失败: %v\n", id, err)
-		return err
+		return apperr.ModSubFail
 	}
 
 	return nil
@@ -120,7 +123,7 @@ func (m *Manager) UnsubMod(id string) error {
 
 	if err := m.save(); err != nil {
 		log.Printf("[ERROR] 模组 %s 取消订阅失败: %v\n", id, err)
-		return err
+		return apperr.ModUnsubFail
 	}
 
 	return nil
@@ -142,7 +145,7 @@ func (m *Manager) UpdateModRemark(id, remark string) error {
 
 	if err := m.save(); err != nil {
 		log.Printf("[ERROR] 模组 %s 修改备注失败: %v\n", id, err)
-		return err
+		return apperr.ModUpdateRemarkFail
 	}
 
 	return nil

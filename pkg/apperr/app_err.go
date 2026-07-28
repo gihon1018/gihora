@@ -60,7 +60,8 @@ func (e *AppError) Unwrap() error {
 }
 
 func (e *AppError) Is(target error) bool {
-	t, ok := target.(*AppError)
+	var t *AppError
+	ok := errors.As(target, &t)
 	return ok && e.Code == t.Code
 }
 
