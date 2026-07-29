@@ -2,6 +2,7 @@ package mod
 
 import (
 	"fmt"
+	"gihora/internal/dst/mod/model"
 	"gihora/pkg/apperr"
 	"gihora/pkg/util"
 	"log"
@@ -14,7 +15,7 @@ import (
 var modReg = regexp.MustCompile(`^ServerModSetup\("([^"]+)"\)\s*(?:--\s*(.*))?$`)
 
 type Manager struct {
-	ModList []Mod
+	ModList []model.Mod
 	cfg     Config
 	mu      sync.RWMutex
 }
@@ -48,7 +49,7 @@ func (m *Manager) init() error {
 		if parts != nil {
 			id := parts[1]
 			remark := parts[2]
-			m.ModList = append(m.ModList, NewMod(id, remark))
+			m.ModList = append(m.ModList, model.NewMod(id, remark))
 		}
 	}
 
@@ -82,7 +83,7 @@ func (m *Manager) hasMod(id string) bool {
 	return false
 }
 
-func (m *Manager) ListMods() []Mod {
+func (m *Manager) ListMods() []model.Mod {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -97,7 +98,7 @@ func (m *Manager) SubMod(id, remark string) error {
 		return apperr.ModAlreadySubbed.WithMsg(fmt.Sprintf("模组 %s 已订阅", id))
 	}
 
-	m.ModList = append(m.ModList, NewMod(id, remark))
+	m.ModList = append(m.ModList, model.NewMod(id, remark))
 
 	if err := m.save(); err != nil {
 		log.Printf("[ERROR] 模组 %s 订阅失败: %v\n", id, err)

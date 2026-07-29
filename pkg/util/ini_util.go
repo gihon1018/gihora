@@ -14,7 +14,7 @@ type IniFile struct {
 func NewIniFile(path string) (*IniFile, error) {
 	file, err := ini.Load(path)
 	if err != nil {
-		return nil, fmt.Errorf("加载 ini 文件 %s 失败: %w\n", path, err)
+		return nil, fmt.Errorf("加载 ini 文件 %s 失败: %w", path, err)
 	}
 	return &IniFile{
 		file: file,
@@ -57,16 +57,21 @@ func (i *IniFile) Set(section, key, value string) {
 func (i *IniFile) DeleteKey(section, key string) error {
 	s, err := i.file.GetSection(section)
 	if err != nil {
-		return fmt.Errorf("获取 section 区块 %s 失败: %w\n", section, err)
+		return fmt.Errorf("获取 section 区块 %s 失败: %w", section, err)
 	}
 	s.DeleteKey(key)
 	return nil
 }
 
-func (i *IniFile) Save() error {
-	if i.path == "" {
-		return fmt.Errorf("ini 文件路径为空")
+func (i *IniFile) MapTo(section string, obj any) error {
+	err := i.file.Section(section).MapTo(obj)
+	if err != nil {
+		return fmt.Errorf("映射 section 区块 %s 失败: %w", section, err)
 	}
+	return nil
+}
+
+func (i *IniFile) Save() error {
 	return i.file.SaveTo(i.path)
 }
 

@@ -1,0 +1,2 @@
+[00:01:16]: [Join Announcement] gihon
+[00:01:29]: [Leave Announcement] gihon

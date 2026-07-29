@@ -2,6 +2,7 @@ package mod
 
 import (
 	"fmt"
+	"gihora/internal/dst/mod/model"
 
 	"github.com/gin-gonic/gin"
 
@@ -26,7 +27,7 @@ func (h *Handler) ListMods(c *gin.Context) {
 }
 
 func (h *Handler) SubMod(c *gin.Context) {
-	var mod Mod
+	var mod model.Mod
 	if err := c.ShouldBindJSON(&mod); err != nil {
 		resp.Fail(c, apperr.ModParamInvalid)
 		return
@@ -54,7 +55,7 @@ func (h *Handler) UnsubMod(c *gin.Context) {
 func (h *Handler) UpdateModRemark(c *gin.Context) {
 	id := c.Param("id")
 
-	var mod Mod
+	var mod model.Mod
 	if err := c.ShouldBindJSON(&mod); err != nil {
 		resp.Fail(c, apperr.ModParamInvalid)
 		return

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func ReadFileByLine(path string) ([]string, error) {
@@ -39,4 +40,31 @@ func WriteToFile(path, content string) error {
 	}
 
 	return nil
+}
+
+func ListSubDirPaths(path string) ([]string, error) {
+	stat, err := os.Stat(path)
+	if err != nil {
+		return nil, fmt.Errorf("获取文件 %s 的信息失败: %w", path, err)
+	}
+	if !stat.IsDir() {
+		return nil, fmt.Errorf("文件 %s 不是目录", path)
+	}
+
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return nil, fmt.Errorf("读取目录 %s 失败: %w", path, err)
+	}
+
+	var paths []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		paths = append(paths, filepath.Join(path, entry.Name()))
+
+	}
+
+	return paths, nil
 }

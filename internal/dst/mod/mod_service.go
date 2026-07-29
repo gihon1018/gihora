@@ -1,5 +1,7 @@
 package mod
 
+import "gihora/internal/dst/mod/model"
+
 type Service struct {
 	manager *Manager
 }
@@ -11,7 +13,7 @@ func NewService(manager *Manager) *Service {
 	return s
 }
 
-func (s *Service) ListMods() []Mod {
+func (s *Service) ListMods() []model.Mod {
 	return s.manager.ListMods()
 }
 

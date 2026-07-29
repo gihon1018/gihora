@@ -1,4 +1,4 @@
-package mod
+package model
 
 type Mod struct {
 	Id     string `json:"id"`
